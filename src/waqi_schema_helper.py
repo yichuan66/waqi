@@ -1,4 +1,4 @@
-from sharedutility import *
+from shared_utils import *
 
 class WaqiSchemaHelper:    
     @staticmethod
