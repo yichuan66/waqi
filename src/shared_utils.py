@@ -18,3 +18,6 @@ def is_float(item):
         return True
     except ValueError:
         return False
+
+def get_date_str(date):
+    return date.strftime('%Y-%m-%d_%H_%M_%S_%f')[:-3]
