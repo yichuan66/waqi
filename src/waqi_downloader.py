@@ -12,7 +12,7 @@ class WaqiDownloader:
         self.token = token
 
     def download_waqi_data(self):
-        response = self.fetch_response(0, 200)
+        response = self.fetch_response(0, 20000)
         result = [WaqiSchemaHelper.parse_waqi_json_packet_to_csv_row(item) 
                   for item in response]   
         result = [item for item in result if item]
