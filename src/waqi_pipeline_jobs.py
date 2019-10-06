@@ -10,7 +10,6 @@ def download_raw_waqi_data(token, output_path):
     helper.write_result(result, output_path)
 
 def filter_incomplete_row(input_path, output_path):
-
     data = []
     with open(input_path, 'r', newline='') as input_file:
         data_reader = csv.reader(input_file, delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL)
