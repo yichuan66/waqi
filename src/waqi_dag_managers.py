@@ -1,8 +1,6 @@
 import uuid
 import datetime
-import os
-from glob import glob
-from shared_utils import get_date_str
+from shared_utils import get_date_str, FileContract
 
 class WaqiPipelineContextManager:
     def __init__(self):
@@ -58,24 +56,4 @@ class WaqiTransformDagManager(WaqiDagManager):
 
     def data_path_output(self):
         return self.output_file_path_list[0]
-
-class FileContract():
-    def __init__(self, root_folder, use_versioned_subdir, filename_list):
-        self.root_folder = root_folder
-        self.use_versioned_subdir = use_versioned_subdir
-        self.filename_list = filename_list
-
-    def get_latest_file_list(self):
-        base_folder = self.root_folder
-        if self.use_versioned_subdir:
-            dirs = glob(os.path.join(self.root_folder, "*", ""))
-            base_folder = sorted(dirs)[-1]
-        return [base_folder + item for item in self.filename_list]
-
-
-    def create_new_file_list(self):
-        base_folder = self.root_folder
-        if self.use_versioned_subdir:
-            base_folder += get_date_str(datetime.datetime.now()) + '/'
-        return [base_folder + item for item in self.filename_list]
         
