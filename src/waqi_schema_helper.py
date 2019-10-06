@@ -1,5 +1,6 @@
-class WaqiSchemaHelper:
-    
+from sharedutility import *
+
+class WaqiSchemaHelper:    
     @staticmethod
     def parse_waqi_json_packet_to_csv_row(packet):
         if not packet.get('data'):
@@ -63,19 +64,8 @@ class WaqiSchemaHelper:
         detailed_pollution = None
         if data.get('iaqi'):
             detailed_pollution = data['iaqi']
-        pollution_list = [
-            'co',
-            'dew',
-            'h',
-            'o3',
-            'p',
-            'pm10',
-            'pm25',
-            'r',
-            'so2',
-            't']
             
-        for item in pollution_list:
+        for item in WaqiSchemaHelper._pollution_list:
             if not detailed_pollution or not detailed_pollution.get(item):
                 row.append('')
             else:
@@ -96,31 +86,31 @@ class WaqiSchemaHelper:
             if field_name == WaqiSchemaHelper.station_index:
                 if not item.isdigit():
                     return False
-            # elif field_name == WaqiSchemaHelper.latitude:
-            #     if not is_valid_latitude(item):
-            #         return False
-            # elif field_name == WaqiSchemaHelper.longitude:
-            #     if not is_valid_latitude(item):
-            #         return False
-            # elif field_name == WaqiSchemaHelper.date_time:
-            #     if not is_valid_date_time(item):
-            #         return False
-            # elif field_name == WaqiSchemaHelper.aqi:
-            #     if not is_valid_aqi(item):
-            #         return False
-            # elif field_name == WaqiSchemaHelper.city_name:
-            #     if not is_valid_city_name(item):
-            #         return False
-            # elif field_name == WaqiSchemaHelper.city_url:
-            #     if not is_valid_latitude(item):
-            #         return False
-            # elif field_name == WaqiSchemaHelper.dominant_pollution:
-            #     if not is_valid_dominant_pollution(item):
-            #         return False
+            elif field_name == WaqiSchemaHelper.latitude:
+                if not is_valid_latitude(item):
+                    return False
+            elif field_name == WaqiSchemaHelper.longitude:
+                if not is_valid_longitude(item):
+                    return False
+            elif field_name == WaqiSchemaHelper.date_time:
+                if item == None or item == '':
+                    return False
+            elif field_name == WaqiSchemaHelper.time_zone:
+                if item == None or item == '':
+                    return False
+            elif field_name == WaqiSchemaHelper.aqi:
+                if not item.isdigit():
+                    return False
+            elif field_name == WaqiSchemaHelper.city_name:
+                if item == None or item == '':
+                    return False
+            elif field_name == WaqiSchemaHelper.dominant_pollution:
+                if item not in WaqiSchemaHelper._pollution_list:
+                    return False
 
         return True
 
-    # variables
+     # variables
     station_index = 'station_index'
     latitude = 'latitude'
     longitude = 'longitude'
@@ -161,3 +151,15 @@ class WaqiSchemaHelper:
         pollution_r,
         pollution_so2,
         pollution_t]
+    
+    _pollution_list = [
+            'co',
+            'dew',
+            'h',
+            'o3',
+            'p',
+            'pm10',
+            'pm25',
+            'r',
+            'so2',
+            't']
