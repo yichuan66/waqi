@@ -12,7 +12,7 @@ class WaqiDownloader:
         self.token = token
 
     def download_waqi_data(self):
-        response = self.fetch_response(0, 20000)
+        response = self._fetch_response(0, 200)
         result = [WaqiSchemaHelper.parse_waqi_json_packet_to_csv_row(item) 
                   for item in response]   
         result = [item for item in result if item]
@@ -28,7 +28,7 @@ class WaqiDownloader:
             result_writer.writerow(WaqiSchemaHelper.schema)
             result_writer.writerows(result)
 
-    def fetch_response(self, start, end):
+    def _fetch_response(self, start, end):
         block_size = 500
         result = []
         loop = asyncio.get_event_loop()
@@ -39,27 +39,27 @@ class WaqiDownloader:
             else:
                 block_end = end
             start += block_size
-            future = asyncio.ensure_future(self.fetch_response_in_block(block_start, block_end))
+            future = asyncio.ensure_future(self._fetch_response_in_block(block_start, block_end))
             result += loop.run_until_complete(future)     
         loop.close()   
         result = [json.loads(item) for item in result]
         return result
 
-    async def fetch_response_in_block(self, start, end):
+    async def _fetch_response_in_block(self, start, end):
         tasks = []
         async with aiohttp.ClientSession() as session:        
             for idx in range(start, end):
-                task = asyncio.ensure_future(self.get_waqi_api_json_response(session, idx))
+                task = asyncio.ensure_future(self._get_waqi_api_json_response(session, idx))
                 tasks.append(task)
             return await asyncio.gather(*tasks)
 
-    async def get_waqi_api_json_response(self, session, idx):
-        url = self.get_waqi_data_url_by_index(idx)
+    async def _get_waqi_api_json_response(self, session, idx):
+        url = self._get_waqi_data_url_by_index(idx)
         async with session.get(url) as response:
             return await response.read()
 
-    def get_waqi_data_url_by_index(self, idx):
-        root_url = "https://api.waqi.info/feed/"
-        return WaqiDownloader.root_url + '@' + str(idx) + '/?token=' + self.token
+    def _get_waqi_data_url_by_index(self, idx):
+        return self._root_url() + '@' + str(idx) + '/?token=' + self.token
 
-    root_url = "https://api.waqi.info/feed/"
+    def _root_url(self):
+        return "https://api.waqi.info/feed/"
