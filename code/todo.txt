@@ -1,5 +1,11 @@
 * schedule the download run
 
+* schedule the transform run
+
+* use sub-dag to merge download and trasfrom together; keep their independency
+
+* plan to migrate to AWS 
+
 * write some unit tests for critical components
 
 * add logging (what happend at each job run)
