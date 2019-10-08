@@ -2,7 +2,7 @@ import shutil
 import os
 
 root_path = "/home/yichuan33"
-src_root_path = root_path + "/waqi/src/"
+src_root_path = root_path + "/waqi/code/src/"
 dst_root_path = root_path + "/airflow/dags/waqi_dags/"
 
 src_list = [
