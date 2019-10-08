@@ -39,7 +39,6 @@ class FileContract():
             base_folder = sorted(dirs)[-1]
         return [base_folder + item for item in self.filename_list]
 
-
     def create_new_file_list(self):
         base_folder = self.root_folder
         if self.use_versioned_subdir:

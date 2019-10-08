@@ -1,9 +1,9 @@
-* complete waqi_schema_helper is_valid_row function
+* write a airflow deployment script
+
+* get the download job up and running with airflow scheduler and webserver
 
 * write some unit tests for critical components
 
 * add logging (what happend at each job run)
-
-* start to define real airflow tasks and schedule a per-hour run
 
 * think about adding try/catch block to make code more robust
