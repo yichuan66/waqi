@@ -1,6 +1,4 @@
-* write a airflow deployment script
-
-* get the download job up and running with airflow scheduler and webserver
+* schedule the download run
 
 * write some unit tests for critical components
 

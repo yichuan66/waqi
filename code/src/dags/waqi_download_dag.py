@@ -10,13 +10,13 @@ from waqi_pipeline_jobs import *
 # DAG Parameters
 args = {
     'owner': 'airflow',
-    'start_date': airflow.utils.dates.days_ago(0),
+    'start_date': datetime.datetime(2019, 10, 8, 9),
 }
 
 dag = DAG(
-    dag_id='waqi_download_dag_id',
+    dag_id='download_waqi_data',
     default_args=args,
-    schedule_interval=None,
+    schedule_interval='10 * * * *',
 )
 
 # DAG Definition
@@ -26,7 +26,7 @@ download_manager = WaqiDownloadDagManager(
     context_manager.download_output_contract())
 
 task = PythonOperator(
-    task_id='waqi_download_task_id',
+    task_id='waqi_download_task',
     python_callable=download_raw_waqi_data,
     op_kwargs=
     {
