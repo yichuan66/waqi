@@ -69,11 +69,20 @@ class GeodesicGrid:
         r8 = DiamondRegion([pts[5], pts[10], bot, pts[9]], '8')
         r9 = DiamondRegion([pts[6], pts[11], bot, pts[10]], '9')
 
+        # return [r0, r1]
         return [r0, r1, r2, r3, r4, r5, r6, r7, r8, r9]
 
     @staticmethod
     def get_grid(order, r):
-        return [region.centroid() for region in GeodesicGrid.get_init_regions(r)]
+        regions = GeodesicGrid.get_init_regions(r)
+        while order > 0:
+            next_regions = []
+            for region in regions:
+                next_regions += region.sub_regions()
+            regions = next_regions
+            order -= 1
+
+        return [region.centroid() for region in regions]
 
 class DiamondRegion:
     def __init__(self, vertices, encoding):
@@ -87,7 +96,7 @@ class DiamondRegion:
         self.encoding = encoding
 
     def centroid(self):
-        return Utils.surface_mid_point(self.vertices[0], self.vertices[2])
+        return Utils.surface_mid_point(self.vertices[1], self.vertices[3])
 
     def sub_regions(self):
         '''
@@ -110,16 +119,16 @@ class DiamondRegion:
         '''
 
         v = self.vertices
-        top_right = Utils.surface_mid_point(self.v[0], self.v[1])
-        bot_right = Utils.surface_mid_point(self.v[1], self.v[2])
-        bot_left = Utils.surface_mid_point(self.v[2], self.v[3])
-        top_left = Utils.surface_mid_point(self.v[3], self.v[0])
+        top_right = Utils.surface_mid_point(v[0], v[1])
+        bot_right = Utils.surface_mid_point(v[1], v[2])
+        bot_left = Utils.surface_mid_point(v[2], v[3])
+        top_left = Utils.surface_mid_point(v[3], v[0])
 
         center = self.centroid()
-        r0 = DiamondRegion(v[0], top_right, center, top_left, self.encoding + '0')
-        r1 = DiamondRegion(top_right, v[1], bot_right, center, self.encoding + '1')
-        r2 = DiamondRegion(center, bot_right, v[2], bot_left, self.encoding + '2')
-        r0 = DiamondRegion(top_left, center, bot_left, v[3], self.encoding + '3')
+        r0 = DiamondRegion([v[0], top_right, center, top_left], self.encoding + '0')
+        r1 = DiamondRegion([top_right, v[1], bot_right, center], self.encoding + '1')
+        r2 = DiamondRegion([center, bot_right, v[2], bot_left], self.encoding + '2')
+        r3 = DiamondRegion([top_left, center, bot_left, v[3]], self.encoding + '3')
 
         return [r0, r1, r2, r3]
 
@@ -159,14 +168,14 @@ def draw_graph(pts):
     y = [pt.y for pt in pts]
     z = [pt.z for pt in pts]
     color = [1 for i in range(len(pts))]
-    size = [10 for i in range(len(pts))]
+    size = [3 for i in range(len(pts))]
 
     marker = dict(size=size, color=color, opacity=0.8)
     fig = go.Figure(data=[go.Scatter3d(x=x, y=y, z=z, mode='markers', marker=marker)])
     fig.show()
 
 def main():
-    points = GeodesicGrid.get_grid(0, 1)
+    points = GeodesicGrid.get_grid(4, 1)
     draw_graph(points)
 
 if __name__ == "__main__":
