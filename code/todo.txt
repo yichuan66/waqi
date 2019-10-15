@@ -1,4 +1,7 @@
-* schedule the download run
+* draw heat map
+    * make geodesic grid
+    * implement KNN with raw data and geodesic grid
+    * display head map
 
 * schedule the transform run
 
