@@ -69,7 +69,6 @@ class GeodesicGrid:
         r8 = DiamondRegion([pts[5], pts[10], bot, pts[9]], '8')
         r9 = DiamondRegion([pts[6], pts[11], bot, pts[10]], '9')
 
-        # return [r0, r1]
         return [r0, r1, r2, r3, r4, r5, r6, r7, r8, r9]
 
     @staticmethod
