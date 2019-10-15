@@ -174,7 +174,7 @@ def draw_graph(pts):
     fig.show()
 
 def main():
-    points = GeodesicGrid.get_grid(4, 1)
+    points = GeodesicGrid.get_grid(order=4, r=1)
     draw_graph(points)
 
 if __name__ == "__main__":
