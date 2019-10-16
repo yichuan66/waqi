@@ -143,19 +143,17 @@ class Point3D:
     def distance(self, pt1):
         return (abs(self.x-pt1.x)**2 + abs(self.y-pt1.y)**2 + abs(self.z-pt1.z)**2)**0.5
 
-    def latlon(pt):
-        r = pt.radius()
-        x = pt[0]
-        y = pt[1]
-        z = pt[2]
-        lat = Utils.rad_to_deg(np.arcsin(z/r))
-        lon = Utils.rad_to_deg(np.arctan(y/x))
-        if x < 0:
-            if y > 0:
+    def lat(self):
+        return Utils.rad_to_deg(np.arcsin(self.z/self.radius()))
+
+    def lon(self):
+        lon = Utils.rad_to_deg(np.arctan(self.y/self.x))
+        if self.x < 0:
+            if self.y > 0:
                 lon += 180
-            if y <= 0:
+            if self.y <= 0:
                 lon -= 180
-        return lat, lon
+        return lon
 
     def scale(self, factor):
         self.x *= factor
@@ -177,5 +175,5 @@ def main():
     points = GeodesicGrid.get_grid(order=4, r=1)
     draw_graph(points)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
